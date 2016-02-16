@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/codegangsta/cli"
+	"github.com/fatih/color"
 	"github.com/kardianos/osext"
 	"github.com/olekukonko/tablewriter"
 	"io"
@@ -606,7 +607,14 @@ func actionSSH(c *cli.Context) {
 		exit(fmt.Sprintf("Unknown instance: %s\n%+v", c.Args().First(), instances))
 	}
 
-	cmd := exec.Command(
+	color.Set(color.BgRed)
+	defer color.Unset()
+
+	cmd := exec.Command("clear") //Linux example, its tested
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+
+	cmd = exec.Command(
 		"ssh", "-i", profile.CertLocation,
 		fmt.Sprintf("%s@%s", profile.User, host),
 	)
